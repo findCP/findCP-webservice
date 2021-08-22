@@ -2,6 +2,10 @@
 .env
 files/
 static/
+findcp-env/
+
+# IDE
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
