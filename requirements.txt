@@ -13,3 +13,7 @@ importlib_resources
 Flask-WTF
 flower
 pymysql
+depinfo
+pipdeptree
+python-dotenv
+future
