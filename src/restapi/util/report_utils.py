@@ -29,7 +29,7 @@ LOGGER = get_task_logger(__name__)
 def compute_critical_reactions(model_path, output_path, objective=None, fraction_of_optimum=None, model_uuid=None):
 
     # IMPORTED here to avoid circular references
-    from restapi.app import send_message_client
+    from src.restapi.app import send_message_client
 
     def verbose_f(text, args1=None, args2=None):
         '''
@@ -59,7 +59,7 @@ def compute_critical_reactions(model_path, output_path, objective=None, fraction
 def compute_growth_dependent_reactions(model_path, output_path, objective=None, model_uuid=None):
 
     # IMPORTED here to avoid circular references
-    from restapi.app import send_message_client
+    from src.restapi.app import send_message_client
 
     def verbose_f(text, args1=None, args2=None):
         '''

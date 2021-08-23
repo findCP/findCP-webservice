@@ -54,7 +54,7 @@ def read_config_model(model_path, config):
 def generate_sets_report(model_path, output_path, model_uuid, config):
 
     # Import and define progess notification function
-    from restapi.app import send_message_client
+    from src.restapi.app import send_message_client
 
     def verbose_f(text, args1=None, args2=None):
         '''
