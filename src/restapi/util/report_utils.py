@@ -17,6 +17,7 @@
 """
 
 import logging
+import ntpath
 
 from celery.utils.log import get_task_logger
 from findCPcore import Facade
@@ -24,12 +25,11 @@ from findCPcore import FacadeUtils
 from findCPcore.utils.CriticalCPConfig import CriticalCPConfig
 from findCPcore.utils.GrowthDependentCPConfig import GrowthDependentCPConfig
 
+from src.restapi.socket_util import send_message_client
+
 LOGGER = get_task_logger(__name__)
 
 def compute_critical_reactions(model_path, output_path, objective=None, fraction_of_optimum=None, model_uuid=None):
-
-    # IMPORTED here to avoid circular references
-    from src.restapi.app import send_message_client
 
     def verbose_f(text, args1=None, args2=None):
         '''
@@ -54,12 +54,11 @@ def compute_critical_reactions(model_path, output_path, objective=None, fraction
     facade = Facade()
     facade.generate_critical_cp_report(config)
 
-    return (config.output_path_html, config.output_path_spreadsheet)
+    _, filename1 = ntpath.split(config.output_path_html)
+    _, filename2 = ntpath.split(config.output_path_spreadsheet)
+    return (filename1, filename2)
 
 def compute_growth_dependent_reactions(model_path, output_path, objective=None, model_uuid=None):
-
-    # IMPORTED here to avoid circular references
-    from src.restapi.app import send_message_client
 
     def verbose_f(text, args1=None, args2=None):
         '''
@@ -81,5 +80,7 @@ def compute_growth_dependent_reactions(model_path, output_path, objective=None, 
     facade = Facade()
     facade.generate_growth_dependent_report(config)
 
-    return (config.output_path_html, config.output_path_spreadsheet)
+    _, filename1 = ntpath.split(config.output_path_html)
+    _, filename2 = ntpath.split(config.output_path_spreadsheet)
+    return (filename1, filename2)
 

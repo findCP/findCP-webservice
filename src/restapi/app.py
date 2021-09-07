@@ -15,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
 import eventlet
 eventlet.monkey_patch()
 
@@ -81,7 +80,7 @@ app.config['SWAGGER'] = {
     'title': 'findCP API',
     'uiversion': 3
 }
-Swagger(app, template_file='app.yml')
+Swagger(app, template_file='swagger.yml')
 LOGGER.info("Successfully init Swagger")
 
 # Register blueprints
@@ -104,6 +103,7 @@ socketio = SocketIO(app, \
                     logger=True, \
                     engineio_logger=True, \
                     message_queue=app.config['REDIS_BROKER_URL'])
+
 
 def send_message_client(room_name, message):
     LOGGER.info(f"Sending event to room: {room_name}")

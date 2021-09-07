@@ -20,12 +20,14 @@ from math import isnan
 import cobra
 from cobra.flux_analysis import *
 import logging
+from flask import current_app
 
 
 from findCPcore import *
 from src.restapi.util.model_utils import *
 from src.restapi.beans.OptimizationEnum import *
 from src.restapi.beans.MediumEnum import *
+from src.restapi.socket_util import send_message_client
 
 PROCESSES = 1
 INFEASIBLE = "infeasible"
@@ -52,9 +54,6 @@ def read_config_model(model_path, config):
     return model
 
 def generate_sets_report(model_path, output_path, model_uuid, config):
-
-    # Import and define progess notification function
-    from src.restapi.app import send_message_client
 
     def verbose_f(text, args1=None, args2=None):
         '''
