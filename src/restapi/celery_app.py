@@ -17,6 +17,7 @@
 """
 
 import os
+import itertools
 
 from dotenv import load_dotenv
 
@@ -44,3 +45,22 @@ celery_app.conf.update(
     accept_content=['pickle'],
     imports = (os.environ.get('CELERY_IMPORTS'),)
 )
+
+def get_pending_tasks_length():
+    i = celery_app.control.inspect()
+    if i.reserved() is None:
+        return 0  # Default value
+    else:
+        len_tasks = len(list(itertools.chain.from_iterable(i.reserved().values())))
+        return len_tasks
+
+def get_task_pending_position(task_uuid):
+    i = celery_app.control.inspect()
+    if i.reserved() is None:
+        return 0  # Default value
+    else:
+        for v in i.reserved().values():
+            g = [i for i, e in enumerate(v) if e["id"] == task_uuid]
+            if len(g) != 0:
+                return g[0]
+        return 0  # Default value

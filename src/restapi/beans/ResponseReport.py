@@ -3,11 +3,12 @@ from json import JSONEncoder
 
 class ResponseReport:
 
-    def __init__(self, status=None, finished=None, file_spreadsheet=None, file_html=None):
+    def __init__(self, status=None, finished=None, file_spreadsheet=None, file_html=None, pending_length=None):
         self.status = status
         self.finished = finished
         self.file_spreadsheet = file_spreadsheet
         self.file_html = file_html
+        self.pending_length = pending_length
 
     @property
     def status_attr(self):
@@ -40,3 +41,12 @@ class ResponseReport:
     @file_html_attr.setter
     def file_html_attr(self, file_html):
         self.file_html = file_html
+
+    @property
+    def pending_length_attr(self):
+        return self.pending_length
+
+    @pending_length_attr.setter
+    def pending_length_attr(self, pending_length):
+        self.pending_length = pending_length
+

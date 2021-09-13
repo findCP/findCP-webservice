@@ -18,11 +18,12 @@
 
 import logging
 import traceback
+import itertools
 
 from flask import Blueprint, jsonify
 from celery.result import AsyncResult
 
-from src.restapi.celery_app import celery_app
+from src.restapi.celery_app import celery_app, get_pending_tasks_length, get_task_pending_position
 
 from src.restapi.service.ModelService import ModelService
 from src.restapi.beans.ResponseChokepoints import *
@@ -53,6 +54,7 @@ def get_chokepoints(uuid):
     async_result = AsyncResult(id=str(uuid), app=celery_app)
     result.status = async_result.state
     result.finished = async_result.ready()
+    result.pending_length = get_task_pending_position(uuid)
 
     if async_result.ready():
         list_ob = []
@@ -77,6 +79,7 @@ def get_critical_reactions(uuid):
     async_result = AsyncResult(id=str(uuid), app=celery_app)
     result.status = async_result.state
     result.finished = async_result.ready()
+    result.pending_length = get_task_pending_position(uuid)
 
     if async_result.ready():
         try:
@@ -104,6 +107,7 @@ def get_growth_dependent_reactions(uuid):
     async_result = AsyncResult(id=str(uuid), app=celery_app)
     result.status = async_result.state
     result.finished = async_result.ready()
+    result.pending_length = get_task_pending_position(uuid)
 
     if async_result.ready():
         try:
@@ -132,6 +136,7 @@ def get_report_reactions(uuid):
     async_result = AsyncResult(id=str(uuid), app=celery_app)
     result.status = async_result.state
     result.finished = async_result.ready()
+    result.pending_length = get_task_pending_position(uuid)
 
     if async_result.ready():
         try:

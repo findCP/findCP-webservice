@@ -23,7 +23,7 @@ from flask import Blueprint, jsonify, current_app, request
 
 from src.restapi.tasks.tasks import compute_chokepoints_task, task_compute_critical_reactions, \
     task_compute_growth_dependent_reactions
-from src.restapi.celery_app import celery_app
+from src.restapi.celery_app import celery_app, get_pending_tasks_length
 
 from src.restapi.service.ModelService import ModelService
 from src.restapi.beans.TaskInit import TaskInit
@@ -58,7 +58,7 @@ def compute_chokepoints(uuid):
     task = compute_chokepoints_task.delay(path)
     task_uuid = task.id
 
-    response = jsonify(vars(TaskInit(task_uuid)))
+    response = jsonify(vars(TaskInit(task_uuid, get_pending_tasks_length())))
     LOGGER.info(f"Response: {response}")
     return response
 
@@ -99,7 +99,7 @@ def compute_critical_reactions(uuid):
     )
     task_uuid = task.id
 
-    response = jsonify(vars(TaskInit(task_uuid)))
+    response = jsonify(vars(TaskInit(task_uuid, get_pending_tasks_length())))
     LOGGER.info(f"Response: {response}")
     return response
 
@@ -133,7 +133,7 @@ def compute_growth_dependent_reactions(uuid):
         str(uuid))
     task_uuid = task.id
 
-    response = jsonify(vars(TaskInit(task_uuid)))
+    response = jsonify(vars(TaskInit(task_uuid, get_pending_tasks_length())))
     LOGGER.info(f"Response: {response}")
     return response
 
@@ -184,6 +184,6 @@ def compute_report_reactions(uuid):
     task = compute_sets_report_task.delay(path, output_dir, output_filename, str(uuid), config)
     task_uuid = task.id
 
-    response = jsonify(vars(TaskInit(task_uuid)))
+    response = jsonify(vars(TaskInit(task_uuid, get_pending_tasks_length())))
     LOGGER.info(f"Response: {response}")
     return response
