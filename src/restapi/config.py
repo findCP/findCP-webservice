@@ -32,13 +32,6 @@ class Config(object):
 
     OUTPUT_FILE_EXTENSION = ".xls"
 
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql:" \
-                            + f"//{os.environ.get('MYSQL_USER')}:"\
-                            + f"{os.environ.get('MYSQL_PASSWORD')}" \
-                            + f"@{os.environ.get('MYSQL_HOST')}" \
-                              f"/{os.environ.get('MYSQL_DATABASE')}"
-    SQLALCHEMY_POOL_SIZE = 1
-
     MAX_CONTENT_LENGTH = 1024 * 1024 * 30  # 30MB max file size
 
     DICT_LOGGER = {
@@ -51,33 +44,18 @@ class Config(object):
                 )
             },
         },
-        'handlers': {
-            'console': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'formatter': 'simple'
-            },
-        },
-        'loggers': {
-            'pip': {
-                'level': 'INFO',
-            },
-            'cobra.io.sbml': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': True,
-            }
-        },
-        'root': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': True,
-        },
     }
 
 
 class ProductionConfig(Config):
     DEBUG = False
+
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql:" \
+                              + f"//{os.environ.get('MYSQL_USER')}:" \
+                              + f"{os.environ.get('MYSQL_PASSWORD')}" \
+                              + f"@{os.environ.get('MYSQL_HOST')}" \
+                                f"/{os.environ.get('MYSQL_DATABASE')}"
+    SQLALCHEMY_POOL_SIZE = 1
 
     CELERY_IMPORTS = ("app")
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
@@ -117,6 +95,13 @@ class StagingConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
 
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql:" \
+                              + f"//{os.environ.get('MYSQL_USER')}:" \
+                              + f"{os.environ.get('MYSQL_PASSWORD')}" \
+                              + f"@{os.environ.get('MYSQL_HOST')}" \
+                                f"/{os.environ.get('MYSQL_DATABASE')}"
+    SQLALCHEMY_POOL_SIZE = 1
+
     CELERY_IMPORTS = ("app")
     CELERY_BROKER_URL = "redis://localhost:6379"
     CELERY_RESULT_BACKEND = "redis://localhost:6379"
@@ -131,6 +116,13 @@ class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
 
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql:" \
+                              + f"//{os.environ.get('MYSQL_USER')}:" \
+                              + f"{os.environ.get('MYSQL_PASSWORD')}" \
+                              + f"@{os.environ.get('MYSQL_HOST')}" \
+                                f"/{os.environ.get('MYSQL_DATABASE')}"
+    SQLALCHEMY_POOL_SIZE = 1
+
     CELERY_IMPORTS = ("app")
     CELERY_BROKER_URL = "redis://localhost:6379"
     CELERY_RESULT_BACKEND = "redis://localhost:6379"
@@ -143,6 +135,16 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+    '''
+    If DEBUG is set to True it seems to cause AssertionError. See:
+    - https://github.com/ga4gh/ga4gh-server/issues/791
+    - https://github.com/alexmclarty/mirror/issues/6
+    '''
+    DEBUG = False
+
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
+    SQLALCHEMY_POOL_SIZE = None
+    SQLALCHEMY_POOL_TIMEOUT = None
 
     CELERY_IMPORTS = ("app")
     CELERY_BROKER_URL = "redis://localhost:6379"
@@ -152,3 +154,5 @@ class TestingConfig(Config):
 
     UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER')
     STATIC_FOLDER = os.environ.get('STATIC_FOLDER')
+
+

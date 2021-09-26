@@ -36,6 +36,7 @@ def compute_critical_reactions(model_path, output_path, objective=None, fraction
         args1 = ws room name
         args2 = None
         '''
+        LOGGER.info(text)
         send_message_client(args1, text)
 
     config = CriticalCPConfig()
@@ -44,7 +45,8 @@ def compute_critical_reactions(model_path, output_path, objective=None, fraction
     config.args1 = model_uuid  # this is the ws room identifier
     config.args2 = None
     config.output_path_spreadsheet = output_path
-    config.output_path_html = output_path[:output_path.rfind('.')] + '.html'
+    if output_path is not None:
+        config.output_path_html = output_path[:output_path.rfind('.')] + '.html'
     config.objective = objective
     config.fraction = fraction_of_optimum
     config.processes = 1
@@ -65,6 +67,7 @@ def compute_growth_dependent_reactions(model_path, output_path, objective=None, 
         args1 = ws room name
         args2 = None
         '''
+        LOGGER.info(text)
         send_message_client(args1, text)
 
     config = GrowthDependentCPConfig()
@@ -73,7 +76,8 @@ def compute_growth_dependent_reactions(model_path, output_path, objective=None, 
     config.args1 = model_uuid
     config.args2 = None
     config.output_path_spreadsheet = output_path
-    config.output_path_html = output_path[:output_path.rfind('.')] + '.html'
+    if output_path is not None:
+        config.output_path_html = output_path[:output_path.rfind('.')] + '.html'
     config.objective = objective
     config.processes = 1
 

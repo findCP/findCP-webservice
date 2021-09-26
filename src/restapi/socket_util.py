@@ -7,5 +7,4 @@ socketio = SocketIO(message_queue='redis://')
 
 
 def send_message_client(room_name, message):
-    LOGGER.info(f"Sending event to room: {room_name}")
     socketio.emit(room_name, {'data': message}, to=room_name, room=room_name)

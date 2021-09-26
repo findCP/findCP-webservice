@@ -3,6 +3,8 @@
 files/
 static/
 findcp-env/
+supervisor/pro
+supervisor/dev/logs
 
 # IDE
 .idea

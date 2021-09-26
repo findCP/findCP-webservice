@@ -105,10 +105,6 @@ socketio = SocketIO(app, \
                     message_queue=app.config['REDIS_BROKER_URL'])
 
 
-def send_message_client(room_name, message):
-    LOGGER.info(f"Sending event to room: {room_name}")
-    socketio.emit(room_name, {'data': message}, to=room_name, room=room_name)
-
 @app.errorhandler(404)
 def page_not_found(e):
     #return render_template('404.html'), 404

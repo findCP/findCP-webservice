@@ -8,8 +8,12 @@
 - [Requirements](#requirements)
 - [Install dependencies](#install-dependencies)
 - [Run](#run)
+- [Run with docker-compose](#Run-with-docker-compose)
 - [Test](#test)
 - [Deployment](#deployment)
+  - [Run](#run-1)
+  - [Run with supervisor](#run-with-supervisor-(recommended))
+- [Deployment with docker](#deployment-with-docker)
 - [Maintainers](#maintainers)
 
 
@@ -47,8 +51,28 @@ python3 -m pip install -r requirements.txt
    ```
 
 See:
-- http://127.0.0.1:5000/apidocs
-- http://localhost:5555
+- Swagger-UI API interface
+  - http://127.0.0.1:5000/apidocs
+  ![Swagger page](docs/img/swagger.png)
+
+- Flower management page
+  - http://localhost:5555
+  ![Swagger page](docs/img/flower.png)
+
+## Run with docker-compose
+
+First setup variables on ```.docker.env```.
+Assuming you have [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/) installed, run on terminal:
+```bash
+docker-compose up
+```
+
+In order to bring it down run:
+```bash
+docker-compose down
+```
+
+
 
 ## Test
 
@@ -68,6 +92,7 @@ pytest -v
   - See [Deploying Flask applications](https://flask.palletsprojects.com/en/2.0.x/deploying/index.html)
 - [Nginx](https://nginx.org/en/) (recommended). 
   - See [Nginx gunicorn config](https://docs.gunicorn.org/en/latest/deploy.html) 
+- [Supervisor](http://supervisord.org/) (optional, recommended)
 
 ### Run
 1. Change Redis and MySQL params on ```.env```.
@@ -86,7 +111,43 @@ pytest -v
 5. Setup and run Nginx according to:
    1. [Gunicorn Nginx deployment](https://docs.gunicorn.org/en/latest/deploy.html)
    2. [Flask-SocketIO deployment](https://flask-socketio.readthedocs.io/en/latest/deployment.html#using-nginx-as-a-websocket-reverse-proxy)
+   3. [Flask-SocketIO Using nginx as a Websocket Reverse Proxy](https://flask-socketio.readthedocs.io/en/latest/deployment.html#using-nginx-as-a-websocket-reverse-proxy)
    
+### Run with supervisor (recommended)
+"Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems."
+
+"The server piece of supervisor is named supervisord. It is responsible for starting child programs at its own invocation, responding to commands from clients, restarting crashed or exited subprocesseses, logging its subprocess stdout and stderr output, and generating and handling 'events' ". [[Source]](http://supervisord.org/introduction.html#supervisor-components)
+
+To run findCP-webservice with Supervisor:
+
+1. Change Redis and MySQL params on ```.env```. 
+   1. Note: Redis can also be run with Supervisor. 
+2. Change the parameters on ```supervisor/dev/*``` config files accordingly.
+3. Run celery, flower and Gunicorn with supervisor:
+   ```bash
+   cd supervisor/dev/
+   supervisord -c supervisor.conf
+   ```
+   ```supervisorctl``` can be executed with:
+   ```
+   supervisorctl -s unix:///tmp/supervisor.sock
+   ```
+4. Setup and run Nginx as described previously.
+
+For more info see:
+- [Supervisor Configuration file](http://supervisord.org/configuration.html).
+- [Celery GitHub page: Supervisor example config file](https://github.com/celery/celery/tree/master/extra/supervisord/).
+   
+
+## Deployment with docker
+
+### Requirements
+- [Docker](https://docs.docker.com/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+
+### Run
+See section [Run with docker-compose](#run-with-docker-compose)
+
 ## Maintainers
 [@alexOarga](https://github.com/alexOarga)
 

@@ -45,5 +45,20 @@ def test_critical_reactions(client, filename):
 
     assert client.get(f"/results/{data['model_uuid']}/critical_reactions").status_code == 200
 
+@pytest.mark.parametrize("filename", [DATA_MODEL_FILE])
+def test_growth_dependent(client, filename):
+    data = {'file': (io.BytesIO(__read_file(filename).encode()), "model.xml")}
+    result = client.post(
+        '/submit',
+        data=data,
+        follow_redirects=True,
+        content_type='multipart/form-data'
+    )
+    assert result.status_code == 200
+    data = json.loads(result.get_data(as_text=True))
+
+    assert client.get(f"/results/{data['model_uuid']}/critical_reactions").status_code == 200
+    print(client.get(f"/results/{data['model_uuid']}/critical_reactions").get_data())
+
 
 

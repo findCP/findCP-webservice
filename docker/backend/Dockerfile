@@ -12,6 +12,8 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
+RUN pip uninstall -y findCPcore
+RUN pip install -i https://test.pypi.org/simple/ findCPcore==0.1.3rc1
 
 # copy project
-COPY . /usr/src/app/
+COPY ./ /usr/src/app/

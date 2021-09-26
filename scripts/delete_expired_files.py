@@ -6,12 +6,15 @@ import os
 import platform
 import time 
 import logging
+import pathlib
 from datetime import datetime
 
-PATH_1 = "../src/restapi/static"
-PATH_2 = "../src/restapi/files"
-LOG_FILE = "logs/deleted_log.log"
+PATH_1 = str(pathlib.Path(__file__).parent.resolve()) + "/../src/restapi/static"
+PATH_2 = str(pathlib.Path(__file__).parent.resolve()) + "/../src/restapi/files"
+LOG_FILE = str(pathlib.Path(__file__).parent.resolve()) + "/logs/deleted_log.log"
 MAX_MINUTES = 1410
+
+FILE_EXTENSIONS = ['.xml', '.html', '.xls', '.ods', '.xlsx']
 
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 
@@ -46,13 +49,16 @@ def remove_expired(folder_path):
 
         print(file_creation_minutes)
 
-        if file_creation_minutes > MAX_MINUTES:
+        _, file_extension = os.path.splitext(path)
+
+        if file_creation_minutes > MAX_MINUTES and file_extension in FILE_EXTENSIONS \
+        and "index" not in path:
             
             #os.remove(path)
 
             current_date = datetime.fromtimestamp(current)
             logging.info("Removed file: '" + f + "' on " + str(current_date))
 
-
+logging.info("Executing at: " + str(datetime.fromtimestamp(time.time())))
 remove_expired(PATH_1)
 remove_expired(PATH_2)

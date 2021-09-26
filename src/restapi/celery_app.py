@@ -35,9 +35,9 @@ celery_app = Celery(
 celery_app.conf.update(
     task_track_started=True,
     # Time after which a running job will be interrupted.
-    task_time_limit=18000,  # 2 hours
+    task_time_limit=1800,  # 30 minutes
     # Time after which a successful result will be removed.
-    result_expires=604800,  # 7 days
+    result_expires=7200,  # 2 hours
     # Always restart workers after finishing.
     worker_max_tasks_per_child=1,
     task_serializer='pickle',
